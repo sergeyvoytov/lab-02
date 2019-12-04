@@ -35,13 +35,8 @@ function Picture(image_url, title, description, keyword, horns) {
   this.keyword = keyword;
   this.horns = horns;
 }
-// Picture.prototype.clickEvent= function(){
-//   var arrayOfPictures = $.get("./page-1.json", "json");
-//   console.log(arrayOfPictures);
-//   // this.keyword = keyword;
 
 
-// }
 // Picture.prototype.renderWithJquery = function () {
 //   $('#container').append(`
 //     <div>
@@ -137,14 +132,26 @@ function populate() {
 //   // first hide all the divs
 //   $('div').hide();
 
-//   // then use the button text to find any h2 with text that matches it
-//   const selectorText = $(this).text();
-//   $('h2').each(function () {
-//     if ($(this).text() === selectorText) {
+// then use the button text to find any h2 with text that matches it
+// const selectorText = $(this).text();
+// $('h2').each(function () {
+//   if ($(this).text() === selectorText) {
 
-//       // then use a jquery traversal to find the parent of the h2 (which for us is the dog's div) and show it
+// then use a jquery traversal to find the parent of the h2 (which for us is the dog's div) and show it
 //       $(this).parent().show();
 //     }
 //   });
 // });
+
+$('select[name="on"]').on('change', function () {
+  let $selection = $(this).val();
+  $('img ').hide();
+  $('h2').hide();
+  $('p').hide();
+  // $('#description').hide();
+  // $('#keyword').hide();
+  // $('#horns').hide();
+  $(`section ="${$selection}"]`).show();
+
+});
 
