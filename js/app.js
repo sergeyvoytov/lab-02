@@ -13,10 +13,10 @@ let main = $('main');
 console.log(main);
 
 // setters
-main.append(`
-<h2>Hello class</h2>
-<p>today rocks</p>
-`);
+// main.append(`
+// <h2>Hello class</h2>
+// <p>today rocks</p>
+// `);
 
 // getter then a setter
 // we can write either css or custom jquery selectors to select things
@@ -25,52 +25,67 @@ $('h1').text('Ginger is da bomb diggity dawg');
 // text() is used as a getter
 console.log($('h2').text());
 
-function Dog(name, img, hobbies){
-  this.name = name;
-  this.img = img;
-  this.hobbies = hobbies;
+
+
+function Picture(image_url, title, description, keyword, horns) {
+
+  this.image_url = image_url;
+  this.title = title;
+  this.description = description;
+  this.keyword = keyword;
+  this.horns = horns;
 }
 
-Dog.prototype.renderWithJquery = function(){
-  $('#dogs').append(`
+Picture.prototype.renderWithJquery = function () {
+  $('#container').append(`
     <div>
-      <h2>${this.name}</h2>
-      <img src="${this.img}"></img>
-      <p>${this.hobbies}</p>
+      <img src="${this.image_url}"></img>
+      <h2>${this.title}</h2>
+      <p>${this.description}</p>
+      <p>${this.keyword}</p>
+      <p>${this.horns}</p>
     </div>
   `);
 };
 
-Dog.prototype.renderWithJqueryClone = function(){
-  let clone = $('#dog-template').clone();
+Picture.prototype.renderWithJqueryClone = function () {
+  let clone = $('#image-template').clone();
 
   //change the h2, p, and image
   // find looks in the targeted jquery object
-  clone.find('h2').text(this.name);
-  clone.find('img').attr('src', this.img);
-  clone.find('p').text(this.hobbies);
+  clone.find('img').attr('src', this.image_url);
+  clone.find('h2').text(this.title);
+  clone.find('p').text(this.description);
+  clone.find('p').text(this.keyword);
+  clone.find('p').text(this.horns);
   clone.removeAttr('id');
   console.log(clone);
 
-  $('#dogs').append(clone);
+  $('#container').append(clone);
 };
 
-let odie = new Dog('Odie', 'https://vignette.wikia.nocookie.net/garfield/images/a/ac/OdieCharacter.jpg/revision/latest?cb=20161218045212', 'annoying garfield, loving jon');
+$.get('./data/page-1.json', 'json').then(
+  (data) => {
+    console.log(data);
+    data.forEach(pictureObjFromFile => {
+      let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
+      picture.renderWithJqueryClone();
+    });
+  });
 
-odie.renderWithJquery();
+
+
 // odie.renderWithJqueryClone();
+
+
+
+let hornExample = new Picture('https://via.placeholder.com/150', 'title', 'description', 'keyword', 'horns');
+
+//hornExample.renderWithJquery();
+hornExample.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 
 // $('#dog-template').hide();
-
-$.get('data.json').then(
-  (data) => {
-    console.log(data);
-    data.forEach(dogObjFromFile => {
-      let dog = new Dog(dogObjFromFile.name, dogObjFromFile.image_url, dogObjFromFile.hobbies);
-      dog.renderWithJqueryClone();
-    });
-  });
