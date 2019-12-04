@@ -35,7 +35,13 @@ function Picture(image_url, title, description, keyword, horns) {
   this.keyword = keyword;
   this.horns = horns;
 }
+// Picture.prototype.clickEvent= function(){
+//   var arrayOfPictures = $.get("./page-1.json", "json");
+//   console.log(arrayOfPictures);
+//   // this.keyword = keyword;
 
+
+// }
 // Picture.prototype.renderWithJquery = function () {
 //   $('#container').append(`
 //     <div>
@@ -63,19 +69,45 @@ Picture.prototype.renderWithJqueryClone = function () {
   clone.find('#keyword').text(this.keyword);
   clone.find('#horns').text(this.horns);
   clone.removeAttr('id');
-  console.log(clone);
+  // console.log(clone);
 
   $('#container').append(clone);
 };
-
+var arrOfKeywords = [];
+let uniqueKeyWords = [];
 $.get('./data/page-1.json', 'json').then(
   (data) => {
-    console.log(data);
+
+    // console.log(data);
     data.forEach(pictureObjFromFile => {
       let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
+      arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
       picture.renderWithJqueryClone();
+      renderUniqueImages22(pictureObjFromFile.keyword);
     });
+    populate();
   });
+function renderUniqueImages22(keyword) {
+
+  if (!uniqueKeyWords.includes(keyword)) {
+    uniqueKeyWords.push(keyword);
+  }
+  console.log(uniqueKeyWords);
+}
+
+function populate() {
+  uniqueKeyWords.forEach(function (value) {
+    let selectdrop = $('select');
+    let element = document.createElement('option');
+    element.value = value;
+    element.text = value;
+    selectdrop.append(element);
+  });
+}
+// console.log(arrOfKeywords)
+// const uniqueKeyWords = [...new Set(arrOfKeywords)];
+// console.log(uniqueKeyWords);
+
 
 
 
@@ -93,3 +125,26 @@ $.get('./data/page-1.json', 'json').then(
 // odie.renderWithJqueryClone();
 
 // $('#image-template').hide();
+
+
+// this event is delegated to only trigger if a div inside the section with an id of `dogs` is clicked.
+// $('#section').on('click', 'div', function () {
+//   $(this).hide();
+// });
+
+
+// $('#image-template').on('click', function () {
+//   // first hide all the divs
+//   $('div').hide();
+
+//   // then use the button text to find any h2 with text that matches it
+//   const selectorText = $(this).text();
+//   $('h2').each(function () {
+//     if ($(this).text() === selectorText) {
+
+//       // then use a jquery traversal to find the parent of the h2 (which for us is the dog's div) and show it
+//       $(this).parent().show();
+//     }
+//   });
+// });
+
