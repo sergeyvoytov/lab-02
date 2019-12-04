@@ -21,9 +21,9 @@ console.log(main);
 // getter then a setter
 // we can write either css or custom jquery selectors to select things
 //text() is used as a setter
-$('h1').text('Ginger is da bomb diggity dawg');
-// text() is used as a getter
-console.log($('h2').text());
+// $('h1').text('Ginger is da bomb diggity dawg');
+// // text() is used as a getter
+// console.log($('h2').text());
 
 
 
@@ -36,17 +36,21 @@ function Picture(image_url, title, description, keyword, horns) {
   this.horns = horns;
 }
 
-Picture.prototype.renderWithJquery = function () {
-  $('#container').append(`
-    <div>
-      <img src="${this.image_url}"></img>
-      <h2>${this.title}</h2>
-      <p>${this.description}</p>
-      <p>${this.keyword}</p>
-      <p>${this.horns}</p>
-    </div>
-  `);
-};
+// Picture.prototype.renderWithJquery = function () {
+//   $('#container').append(`
+//     <div>
+//       <img src="${this.image_url}"></img>
+//       <h2>${this.title}</h2>
+//       <p id ="description">${this.description}</p>
+//       <p id="keyword">${this.keyword}</p>
+//       <p id="horns">${this.horns}</p>
+//     </div>
+//   `);
+// };
+
+
+
+
 
 Picture.prototype.renderWithJqueryClone = function () {
   let clone = $('#image-template').clone();
@@ -55,9 +59,9 @@ Picture.prototype.renderWithJqueryClone = function () {
   // find looks in the targeted jquery object
   clone.find('img').attr('src', this.image_url);
   clone.find('h2').text(this.title);
-  clone.find('p').text(this.description);
-  clone.find('p').text(this.keyword);
-  clone.find('p').text(this.horns);
+  clone.find('#description').text(this.description);
+  clone.find('#keyword').text(this.keyword);
+  clone.find('#horns').text(this.horns);
   clone.removeAttr('id');
   console.log(clone);
 
@@ -79,13 +83,13 @@ $.get('./data/page-1.json', 'json').then(
 
 
 
-let hornExample = new Picture('https://via.placeholder.com/150', 'title', 'description', 'keyword', 'horns');
+// let hornExample = new Picture('https://via.placeholder.com/150', 'title', 'description', 'keyword', 'horns');
 
 //hornExample.renderWithJquery();
-hornExample.renderWithJqueryClone();
+// hornExample.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 // odie.renderWithJqueryClone();
 
-// $('#dog-template').hide();
+// $('#image-template').hide();
