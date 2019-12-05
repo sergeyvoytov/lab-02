@@ -13,7 +13,7 @@ function Picture(image_url, title, description, keyword, horns) {
   this.horns = horns;
 }
 
-Picture.prototype.renderWithJqueryClone = function () {
+Picture.prototype.renderWithJqueryClone = function (id) {
   let clone = $('#image-template').clone();
 
   //change the h2, p, and image
@@ -25,47 +25,110 @@ Picture.prototype.renderWithJqueryClone = function () {
   clone.find('#horns').text(this.horns);
   clone.removeAttr('id');
   // console.log(clone);
-  
-  $('#container').append(clone);
+
+  $(id).append(clone);
 };
 var arrOfKeywords = [];
 let uniqueKeyWords = [];
 
 
+const handleData1 = (data) => {
 
-const handleData = (data) => {
-  
   // console.log(data);
   data.forEach(pictureObjFromFile => {
     let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
     arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-    picture.renderWithJqueryClone();
+    picture.renderWithJqueryClone('#container1');
     renderUniqueImages22(pictureObjFromFile.keyword);
   });
+
   populate();
-  
+
+
   /// Handling click
-  
+
   $('select').on('click', function () {
     const keywordValue = $(this).val();
     $('div').hide();
-    
+
     //have to show divs
     $('p').each(function (currentValue, index, array) {
       if ($(this).text() === keywordValue) {
-        
+
+        // if the p is right make the parent 
+        $(this).parent().show();
+      }
+    });
+
+  });
+
+};
+
+// $('#container1').empty();
+
+const handleData2 = (data) => {
+
+  // console.log(data);
+  data.forEach(pictureObjFromFile => {
+    let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
+    arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
+    picture.renderWithJqueryClone('#container2');
+    renderUniqueImages22(pictureObjFromFile.keyword);
+  });
+
+  populate();
+
+
+
+  /// Handling click
+
+  $('select').on('click', function () {
+    const keywordValue = $(this).val();
+    $('div').hide();
+
+    //have to show divs
+    $('p').each(function (currentValue, index, array) {
+      if ($(this).text() === keywordValue) {
+
         // if the p is right make the parent 
         $(this).parent().show();
       }
     });
   });
-  
+
 };
 
-$.get('./data/page-1.json', 'json').then(handleData);
+document.getElementById('page1').addEventListener('click', renderPage1);
+document.getElementById('page2').addEventListener('click', renderPage2);
+
+
+
+
+function renderPage1() {
+  // hide page2
+  $('#container2').hide();
+  $('#container1').show();
+  // run 
+  $.get('./data/page-1.json', 'json').then(handleData1);
+  $('#container1').empty();
+
+}
+
+
+function renderPage2() {
+  // attach event listener to the button page 2  
+  //hide page1
+  //
+  $('#container1').hide();
+  $('#container2').show();
+  $.get('./data/page-2.json', 'json').then(handleData2);
+  $('#container2').empty();
+  // populate();
+}
+
 
 function renderUniqueImages22(keyword) {
-  
+
   if (!uniqueKeyWords.includes(keyword)) {
     uniqueKeyWords.push(keyword);
   }
@@ -79,6 +142,6 @@ function populate() {
     element.value = value;
     element.text = value;
     selectdrop.append(element);
-    $('#image-template').hide();
+  //  $('#image-template').empty();
   });
 }

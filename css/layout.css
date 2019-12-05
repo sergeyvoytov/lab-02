@@ -1,7 +1,7 @@
-*{
+/* *{
     display: inline-block;
 }
- 
+  */
 div{
     width: 500px;
     height: 600px;
@@ -15,4 +15,7 @@ width: 500px;
 height: 500px;
 float: left;
 
+}
+#image-template {
+    display:none;
 }
