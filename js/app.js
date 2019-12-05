@@ -1,6 +1,5 @@
 'use strict';
 
-// Jquery notes
 
 // getter
 let main = $('main');
@@ -26,7 +25,7 @@ Picture.prototype.renderWithJqueryClone = function () {
   clone.find('#horns').text(this.horns);
   clone.removeAttr('id');
   // console.log(clone);
-
+  
   $('#container').append(clone);
 };
 var arrOfKeywords = [];
@@ -35,7 +34,7 @@ let uniqueKeyWords = [];
 
 
 const handleData = (data) => {
-
+  
   // console.log(data);
   data.forEach(pictureObjFromFile => {
     let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
@@ -44,29 +43,29 @@ const handleData = (data) => {
     renderUniqueImages22(pictureObjFromFile.keyword);
   });
   populate();
-
+  
   /// Handling click
-
+  
   $('select').on('click', function () {
     const keywordValue = $(this).val();
     $('div').hide();
-
+    
     //have to show divs
     $('p').each(function (currentValue, index, array) {
       if ($(this).text() === keywordValue) {
-
+        
         // if the p is right make the parent 
         $(this).parent().show();
       }
     });
   });
-
+  
 };
 
 $.get('./data/page-1.json', 'json').then(handleData);
 
 function renderUniqueImages22(keyword) {
-
+  
   if (!uniqueKeyWords.includes(keyword)) {
     uniqueKeyWords.push(keyword);
   }
@@ -80,5 +79,6 @@ function populate() {
     element.value = value;
     element.text = value;
     selectdrop.append(element);
+    $('#image-template').hide();
   });
 }
