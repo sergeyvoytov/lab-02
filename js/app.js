@@ -3,7 +3,7 @@
 
 // getter
 let main = $('main');
-console.log(main);
+// console.log(main);
 function Picture(image_url, title, description, keyword, horns) {
 
   this.image_url = image_url;
@@ -13,32 +13,49 @@ function Picture(image_url, title, description, keyword, horns) {
   this.horns = horns;
 }
 
-Picture.prototype.renderWithJqueryClone = function (id) {
-  let clone = $('#image-template').clone();
+// Picture.prototype.renderWithJqueryClone = function (id) {
+//   let clone = $('#image-template').clone();
 
-  //change the h2, p, and image
-  // find looks in the targeted jquery object
-  clone.find('img').attr('src', this.image_url);
-  clone.find('h2').text(this.title);
-  clone.find('#description').text(this.description);
-  clone.find('#keyword').text(this.keyword);
-  clone.find('#horns').text(this.horns);
-  clone.removeAttr('id');
+//   //change the h2, p, and image
+//   // find looks in the targeted jquery object
+//   clone.find('img').attr('src', this.image_url);
+//   clone.find('h2').text(this.title);
+//   clone.find('#description').text(this.description);
+//   clone.find('#keyword').text(this.keyword);
+//   clone.find('#horns').text(this.horns);
+//   clone.removeAttr('id');
   // console.log(clone);
 
-  $(id).append(clone);
-};
+//   $(id).append(clone);
+// };
 var arrOfKeywords = [];
 let uniqueKeyWords = [];
 
 
+Picture.prototype.renderWithHandelbars = function (id) {
+
+  //get handlebars template from html
+  let source = document.getElementById("handlebar-template").innerHTML;
+  var template = Handlebars.compile(source);
+
+  // let testArray = {title :'potato'}
+  var html = template(this);
+  $(id).append(html);
+
+}
+
 const handleData1 = (data) => {
 
   // console.log(data);
+
+
   data.forEach(pictureObjFromFile => {
     let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
     arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-    picture.renderWithJqueryClone('#container1');
+    //picture.renderWithJqueryClone('#container1');
+
+  //handlebars
+    picture.renderWithHandelbars('#container1');
     renderUniqueImages22(pictureObjFromFile.keyword);
   });
 
@@ -72,7 +89,8 @@ const handleData2 = (data) => {
   data.forEach(pictureObjFromFile => {
     let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
     arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-    picture.renderWithJqueryClone('#container2');
+    // picture.renderWithJqueryClone('#container2');
+    picture.renderWithHandelbars('#container2');
     renderUniqueImages22(pictureObjFromFile.keyword);
   });
 
@@ -132,7 +150,7 @@ function renderUniqueImages22(keyword) {
   if (!uniqueKeyWords.includes(keyword)) {
     uniqueKeyWords.push(keyword);
   }
-  console.log(uniqueKeyWords);
+  // console.log(uniqueKeyWords); 
 }
 
 function populate() {
@@ -142,6 +160,8 @@ function populate() {
     element.value = value;
     element.text = value;
     selectdrop.append(element);
-  //  $('#image-template').empty();
+    //  $('#image-template').empty();
   });
 }
+
+
