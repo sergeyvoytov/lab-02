@@ -35,20 +35,46 @@
             <p id="keyword"></p>
             <p id="horns"></p>
         </div>
+
+
+
+        
+        
+        
         <section id="container1">
         </section>
-
+        
         <section id="container2">
-           </section>
-
-
+        </section>
+        
+        
     </main>
     <footer>
         © 2019 Silas, Serge
     </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.min.js"></script>
     <script type="text/javascript" src="./js/app.js"></script> 
+    
+    
+    <script id="handlebar-template" type="text/x-handlebars-template"> 
+        <div >
+            <img src={{image_url}}>
+            <h2 class="title">{{title}}</h2>
+            <p id="description">{{description}}</p>
+            <p id="keyword">{{keyword}}</p>
+            <p id="horns">{{horns}}</p>
+        </div>
+    </script>
+    
+
+
+
+
 </body>
 
 </html>
+
+
+
