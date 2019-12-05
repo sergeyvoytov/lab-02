@@ -1,9 +1,3 @@
-// How are we implementing it ?
-//     Use AJAX, specifically $.get(), to read the provided JSON file.
-// Each object should become a new instance of a constructor function.Refer to the data to determine the necessary properties.
-// Use jQuery to make a copy of the HTML template of the photo component.For each object, fill in the duplicated template with its properties, then append the copy to the DOM.
-
-
 'use strict';
 
 // Jquery notes
@@ -11,22 +5,6 @@
 // getter
 let main = $('main');
 console.log(main);
-
-// setters
-// main.append(`
-// <h2>Hello class</h2>
-// <p>today rocks</p>
-// `);
-
-// getter then a setter
-// we can write either css or custom jquery selectors to select things
-//text() is used as a setter
-// $('h1').text('Ginger is da bomb diggity dawg');
-// // text() is used as a getter
-// console.log($('h2').text());
-
-
-
 function Picture(image_url, title, description, keyword, horns) {
 
   this.image_url = image_url;
@@ -35,23 +13,6 @@ function Picture(image_url, title, description, keyword, horns) {
   this.keyword = keyword;
   this.horns = horns;
 }
-
-
-// Picture.prototype.renderWithJquery = function () {
-//   $('#container').append(`
-//     <div>
-//       <img src="${this.image_url}"></img>
-//       <h2>${this.title}</h2>
-//       <p id ="description">${this.description}</p>
-//       <p id="keyword">${this.keyword}</p>
-//       <p id="horns">${this.horns}</p>
-//     </div>
-//   `);
-// };
-
-
-
-
 
 Picture.prototype.renderWithJqueryClone = function () {
   let clone = $('#image-template').clone();
@@ -70,18 +31,40 @@ Picture.prototype.renderWithJqueryClone = function () {
 };
 var arrOfKeywords = [];
 let uniqueKeyWords = [];
-$.get('./data/page-1.json', 'json').then(
-  (data) => {
 
-    // console.log(data);
-    data.forEach(pictureObjFromFile => {
-      let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
-      arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-      picture.renderWithJqueryClone();
-      renderUniqueImages22(pictureObjFromFile.keyword);
-    });
-    populate();
+
+
+const handleData = (data) => {
+
+  // console.log(data);
+  data.forEach(pictureObjFromFile => {
+    let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
+    arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
+    picture.renderWithJqueryClone();
+    renderUniqueImages22(pictureObjFromFile.keyword);
   });
+  populate();
+
+  /// Handling click
+
+  $('select').on('click', function () {
+    const keywordValue = $(this).val();
+    $('div').hide();
+
+    //have to show divs
+    $('p').each(function (currentValue, index, array) {
+      if ($(this).text() === keywordValue) {
+
+        // if the p is right make the parent 
+        $(this).parent().show();
+      }
+    });
+  });
+
+};
+
+$.get('./data/page-1.json', 'json').then(handleData);
+
 function renderUniqueImages22(keyword) {
 
   if (!uniqueKeyWords.includes(keyword)) {
@@ -99,59 +82,3 @@ function populate() {
     selectdrop.append(element);
   });
 }
-// console.log(arrOfKeywords)
-// const uniqueKeyWords = [...new Set(arrOfKeywords)];
-// console.log(uniqueKeyWords);
-
-
-
-
-// odie.renderWithJqueryClone();
-
-
-
-// let hornExample = new Picture('https://via.placeholder.com/150', 'title', 'description', 'keyword', 'horns');
-
-//hornExample.renderWithJquery();
-// hornExample.renderWithJqueryClone();
-// odie.renderWithJqueryClone();
-// odie.renderWithJqueryClone();
-// odie.renderWithJqueryClone();
-// odie.renderWithJqueryClone();
-
-// $('#image-template').hide();
-
-
-// this event is delegated to only trigger if a div inside the section with an id of `dogs` is clicked.
-// $('#section').on('click', 'div', function () {
-//   $(this).hide();
-// });
-
-
-// $('#image-template').on('click', function () {
-//   // first hide all the divs
-//   $('div').hide();
-
-// then use the button text to find any h2 with text that matches it
-// const selectorText = $(this).text();
-// $('h2').each(function () {
-//   if ($(this).text() === selectorText) {
-
-// then use a jquery traversal to find the parent of the h2 (which for us is the dog's div) and show it
-//       $(this).parent().show();
-//     }
-//   });
-// });
-
-$('select[name="on"]').on('change', function () {
-  let $selection = $(this).val();
-  $('img ').hide();
-  $('h2').hide();
-  $('p').hide();
-  // $('#description').hide();
-  // $('#keyword').hide();
-  // $('#horns').hide();
-  $(`section ="${$selection}"]`).show();
-
-});
-
