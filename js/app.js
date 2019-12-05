@@ -1,6 +1,5 @@
 'use strict';
 
-
 // getter
 let main = $('main');
 // console.log(main);
@@ -24,7 +23,7 @@ function Picture(image_url, title, description, keyword, horns) {
 //   clone.find('#keyword').text(this.keyword);
 //   clone.find('#horns').text(this.horns);
 //   clone.removeAttr('id');
-  // console.log(clone);
+// console.log(clone);
 
 //   $(id).append(clone);
 // };
@@ -54,7 +53,7 @@ const handleData1 = (data) => {
     arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
     //picture.renderWithJqueryClone('#container1');
 
-  //handlebars
+    //handlebars
     picture.renderWithHandelbars('#container1');
     renderUniqueImages22(pictureObjFromFile.keyword);
   });
@@ -163,5 +162,3 @@ function populate() {
     //  $('#image-template').empty();
   });
 }
-
-
