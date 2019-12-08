@@ -1,6 +1,35 @@
-section {
+
+
+/* 
+body {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    flex-wrap: wrap; */
+
+
+
+/* img{
+
+width: 500px;
+height: 500px;
+float: left;
+
+}
+#image-template {
+    display:none;
+} */
+
+.page{
+    /* display: flex;
+    flex-direction: column;
+    flex-wrap: no-wrap;
+    width: 750px; */
+    /* height: 2px; */
+
+}
+
+img{
+width: 750px;
+height: 600px;
+
 }

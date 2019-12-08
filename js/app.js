@@ -1,164 +1,97 @@
 'use strict';
 
-// getter
-let main = $('main');
-// console.log(main);
-function Picture(image_url, title, description, keyword, horns) {
+const pictures = [];
 
-  this.image_url = image_url;
-  this.title = title;
-  this.description = description;
-  this.keyword = keyword;
-  this.horns = horns;
+function getThings(thePage) {
+
+  $.get(thePage, 'json').then(data => instantiatepicturesAndRenderThem(data, thePage));
 }
 
-// Picture.prototype.renderWithJqueryClone = function (id) {
-//   let clone = $('#image-template').clone();
+getThings('page-1.json');
 
-//   //change the h2, p, and image
-//   // find looks in the targeted jquery object
-//   clone.find('img').attr('src', this.image_url);
-//   clone.find('h2').text(this.title);
-//   clone.find('#description').text(this.description);
-//   clone.find('#keyword').text(this.keyword);
-//   clone.find('#horns').text(this.horns);
-//   clone.removeAttr('id');
-// console.log(clone);
-
-//   $(id).append(clone);
-// };
-var arrOfKeywords = [];
-let uniqueKeyWords = [];
-
-
-Picture.prototype.renderWithHandelbars = function (id) {
-
-  //get handlebars template from html
-  let source = document.getElementById("handlebar-template").innerHTML;
-  var template = Handlebars.compile(source);
-
-  // let testArray = {title :'potato'}
-  var html = template(this);
-  $(id).append(html);
-
+function instantiatepicturesAndRenderThem(picturesArray, page) {
+  picturesArray.forEach(pictureObj => {
+    const c = new Picture(pictureObj, page);
+    pictures.push(c);
+    c.render();
+  });
 }
 
-const handleData1 = (data) => {
+function Picture(cObj, pageNumber) {
+  this.image_url = cObj.image_url;
+  this.title = cObj.title;
+  this.description = cObj.description;
+  this.keyword = cObj.keyword;
+  this.horns = cObj.horns;
+  this.page = pageNumber;
+}
 
-  // console.log(data);
+Picture.prototype.render = function () {
+  // console.log($('#creature-template').html());
+  // console.log(typeof $('#creature-template').html());
 
-
-  data.forEach(pictureObjFromFile => {
-    let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
-    arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-    //picture.renderWithJqueryClone('#container1');
-
-    //handlebars
-    picture.renderWithHandelbars('#container1');
-    renderUniqueImages22(pictureObjFromFile.keyword);
-  });
-
-  populate();
-
-
-  /// Handling click
-
-  $('select').on('click', function () {
-    const keywordValue = $(this).val();
-    $('div').hide();
-
-    //have to show divs
-    $('p').each(function (currentValue, index, array) {
-      if ($(this).text() === keywordValue) {
-
-        // if the p is right make the parent 
-        $(this).parent().show();
-      }
-    });
-
-  });
-
+  const pictureTemplate = Handlebars.compile($('#picture-template').html());
+  const newHtml = pictureTemplate(this);
+  // console.log(this);
+  $('main').append(newHtml);
+  // console.log(newHtml);
 };
 
-// $('#container1').empty();
+let pageWeAreOn = 'page-1.json';
 
-const handleData2 = (data) => {
+$('#page_switch').on('click', function () {
+  $('div').hide();
 
-  // console.log(data);
-  data.forEach(pictureObjFromFile => {
-    let picture = new Picture(pictureObjFromFile.image_url, pictureObjFromFile.title, pictureObjFromFile.description, pictureObjFromFile.keyword, pictureObjFromFile.horns);
-    arrOfKeywords.push(pictureObjFromFile.keyword) //puts all keywords in an array
-    // picture.renderWithJqueryClone('#container2');
-    picture.renderWithHandelbars('#container2');
-    renderUniqueImages22(pictureObjFromFile.keyword);
-  });
+  if (pageWeAreOn === 'page-1.json') {
 
-  populate();
+    const divs = $('div[data-page="page-2.json"]');
+    console.log(divs);
 
+    if (!divs.length) {
+      getThings('page-2.json');
+    }
+    divs.show();
+    pageWeAreOn = 'page-2.json';
+  } else {
+    const divs = $('div[data-page="page-1.json"]');
+    console.log(divs);
 
+    if (!divs.length) {
+      getThings('page-1.json');
+    }
+    divs.show();
+    pageWeAreOn = 'page-1.json';
 
-  /// Handling click
-
-  $('select').on('click', function () {
-    const keywordValue = $(this).val();
-    $('div').hide();
-
-    //have to show divs
-    $('p').each(function (currentValue, index, array) {
-      if ($(this).text() === keywordValue) {
-
-        // if the p is right make the parent 
-        $(this).parent().show();
-      }
-    });
-  });
-
-};
-
-document.getElementById('page1').addEventListener('click', renderPage1);
-document.getElementById('page2').addEventListener('click', renderPage2);
-
-
-
-
-function renderPage1() {
-  // hide page2
-  $('#container2').hide();
-  $('#container1').show();
-  // run 
-  $.get('./data/page-1.json', 'json').then(handleData1);
-  $('#container1').empty();
-
-}
-
-
-function renderPage2() {
-  // attach event listener to the button page 2  
-  //hide page1
-  //
-  $('#container1').hide();
-  $('#container2').show();
-  $.get('./data/page-2.json', 'json').then(handleData2);
-  $('#container2').empty();
-  // populate();
-}
-
-
-function renderUniqueImages22(keyword) {
-
-  if (!uniqueKeyWords.includes(keyword)) {
-    uniqueKeyWords.push(keyword);
   }
-  // console.log(uniqueKeyWords); 
-}
+});
 
-function populate() {
-  uniqueKeyWords.forEach(function (value) {
-    let selectdrop = $('select');
-    let element = document.createElement('option');
-    element.value = value;
-    element.text = value;
-    selectdrop.append(element);
-    //  $('#image-template').empty();
+$('#sort_horns').on('click', function(){
+  pictures.sort(function(a,b) {
+    // if a's horn count is bigger
+    if(a.horns > b.horns) return 1;
+    // or smaller
+    if(b.horns > a.horns) return -1;
+    // or same
+    return 0;
   });
-}
+
+  $('div').remove();
+  pictures.forEach(picture => picture.render());
+  $('div').hide();
+  $(`div[data-page="${pageWeAreOn}"]`).show();
+});
+
+$('#sort_title').on('click', function(){
+  pictures.sort(function(a,b) {
+    if(a.title > b.title) return 1;
+    if(b.title > a.title) return -1;
+    return 0;
+  });
+
+  $('div').remove();
+  pictures.forEach(picture => picture.render());
+  $('div').hide();
+  $(`div[data-page="${pageWeAreOn}"]`).show();
+});
+
+
